@@ -3,73 +3,41 @@ import "./App.css";
 
 function App() {
   const [newItem, setNewItem] = useState("");
-  const [groceryList, setGroceryList] = useState([]);
+  const [groceryList, setGroceryList] = useState([
+    "apples",
+    "oranges",
+    "potatos",
+  ]);
 
   function handleSubmit(e) {
     e.preventDefault();
 
-    setGroceryList((currentGroceryList) => {
-      return [
-        ...currentGroceryList,
-        { id: crypto.randomUUID(), title: newItem, completed: false },
-      ];
-    });
+    setGroceryList([...groceryList, newItem]);
+    console.log(newItem);
 
     setNewItem("");
   }
 
-  function toggleItem(id, completed) {
-    setGroceryList((currentGroceryList) => {
-      return currentGroceryList.map((item) => {
-        if (item.id === id) {
-          return { ...item, completed };
-        }
-
-        return item;
-      });
-    });
-  }
-
-  function deleteItem(id) {
-    setGroceryList((currentGroceryList) => {
-      return currentGroceryList.filter((item) => item.id !== id);
-    });
-  }
+  console.log(groceryList);
 
   return (
-    <>
+    <div>
+      <h1>Grocery List</h1>
       <form onSubmit={handleSubmit}>
-        <label htmlFor="item">New Item</label>
         <input
+          type="text"
           value={newItem}
           onChange={(e) => setNewItem(e.target.value)}
-          type="text"
-          id="item"
         />
+        <button>Add to list</button>
       </form>
-      <button className="btn">Add</button>
-      <h1>Grocery List</h1>
-      <ul className="list">
-        {groceryList.length === 0 && "No items on grocery list"}
-        {groceryList.map((item) => {
-          return (
-            <li key={item.id}>
-              <label>
-                <input
-                  type="checkbox"
-                  checked={item.completed}
-                  onChange={(e) => toggleItem(item.id, e.target.checked)}
-                />
-                {item.title}
-              </label>
-              <button onClick={() => deleteItem(item.id)} className="btn">
-                Delete
-              </button>
-            </li>
-          );
-        })}
-      </ul>
-    </>
+      <div>
+        <ul>
+          <li>Item 1</li>
+          <li>Item 2</li>
+        </ul>
+      </div>
+    </div>
   );
 }
 
