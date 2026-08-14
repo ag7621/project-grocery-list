@@ -4,15 +4,30 @@ import "./App.css";
 function App() {
   const [newItem, setNewItem] = useState("");
   const [groceryList, setGroceryList] = useState([
-    "apples",
-    "oranges",
-    "potatos",
+    {
+      name: "apples",
+      id: crypto.randomUUID(),
+      purchased: false,
+    },
+    {
+      name: "oranges",
+      id: crypto.randomUUID(),
+      purchased: false,
+    },
+    {
+      name: "potatoes",
+      id: crypto.randomUUID(),
+      purchased: false,
+    },
   ]);
 
   function handleSubmit(e) {
     e.preventDefault();
 
-    setGroceryList([...groceryList, newItem]);
+    setGroceryList([
+      ...groceryList,
+      { name: newItem, id: crypto.randomUUID(), purchased: false },
+    ]);
     console.log(newItem);
 
     setNewItem("");
@@ -31,12 +46,12 @@ function App() {
         />
         <button>Add to list</button>
       </form>
-      <div>
-        <ul>
-          <li>Item 1</li>
-          <li>Item 2</li>
-        </ul>
-      </div>
+
+      <ul>
+        {groceryList.map((item) => {
+          return <li key={item.id}>{item.name}</li>;
+        })}
+      </ul>
     </div>
   );
 }
