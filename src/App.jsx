@@ -12,7 +12,7 @@ function App() {
     {
       name: "oranges",
       id: crypto.randomUUID(),
-      purchased: false,
+      purchased: true,
     },
     {
       name: "potatoes",
@@ -33,6 +33,17 @@ function App() {
     setNewItem("");
   }
 
+  function handlePurchased(id, purchased) {
+    setGroceryList((currentGroceryList) => {
+      return currentGroceryList.map((item) => {
+        if (item.id === id) {
+          return { ...item, purchased };
+        }
+        return item;
+      });
+    });
+  }
+
   console.log(groceryList);
 
   return (
@@ -49,7 +60,21 @@ function App() {
 
       <ul>
         {groceryList.map((item) => {
-          return <li key={item.id}>{item.name}</li>;
+          return (
+            <li
+              key={item.id}
+              style={{
+                textDecoration: item.purchased ? "line-through" : "none",
+              }}
+            >
+              <input
+                type="checkbox"
+                checked={item.purchased}
+                onChange={(e) => handlePurchased(item.id, e.target.checked)}
+              />
+              {item.name}
+            </li>
+          );
         })}
       </ul>
     </div>
