@@ -44,6 +44,12 @@ function App() {
     });
   }
 
+  function handleDelete(id) {
+    setGroceryList((currentGroceryList) => {
+      return currentGroceryList.filter((item) => item.id !== id);
+    });
+  }
+
   console.log(groceryList);
 
   return (
@@ -73,6 +79,7 @@ function App() {
                 onChange={(e) => handlePurchased(item.id, e.target.checked)}
               />
               {item.name}
+              <button onClick={() => handleDelete(item.id)}>Delete</button>
             </li>
           );
         })}
