@@ -3,6 +3,7 @@ import "./App.css";
 
 function App() {
   const [newItem, setNewItem] = useState("");
+  const [editId, setEditId] = useState(null);
   const [groceryList, setGroceryList] = useState([
     {
       name: "apples",
@@ -24,13 +25,24 @@ function App() {
   function handleSubmit(e) {
     e.preventDefault();
 
-    setGroceryList([
-      ...groceryList,
-      { name: newItem, id: crypto.randomUUID(), purchased: false },
-    ]);
-    console.log(newItem);
+    if (editId === null) {
+      setGroceryList([
+        ...groceryList,
+        { name: newItem, id: crypto.randomUUID(), purchased: false },
+      ]);
+    } else {
+      setGroceryList((currentGroceryList) => {
+        return currentGroceryList.map((item) => {
+          if (editId === item.id) {
+            return { ...item, name: newItem };
+          }
+          return item;
+        });
+      });
+    }
 
     setNewItem("");
+    setEditId(null);
   }
 
   function handlePurchased(id, purchased) {
@@ -42,6 +54,11 @@ function App() {
         return item;
       });
     });
+  }
+
+  function handleEdit(item) {
+    setNewItem(item.name);
+    setEditId(item.id);
   }
 
   function handleDelete(id) {
@@ -61,7 +78,7 @@ function App() {
           value={newItem}
           onChange={(e) => setNewItem(e.target.value)}
         />
-        <button>Add to list</button>
+        <button>{editId ? "Save" : "Add"}</button>
       </form>
 
       <ul>
@@ -79,6 +96,7 @@ function App() {
                 onChange={(e) => handlePurchased(item.id, e.target.checked)}
               />
               {item.name}
+              <button onClick={() => handleEdit(item)}>Edit</button>
               <button onClick={() => handleDelete(item.id)}>Delete</button>
             </li>
           );
